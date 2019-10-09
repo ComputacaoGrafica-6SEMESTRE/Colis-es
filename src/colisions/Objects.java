@@ -8,6 +8,8 @@ package colisions;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
+import java.awt.event.MouseEvent;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -22,22 +24,26 @@ public class Objects {
     private Polygon triangle;
     private Color color;
     private boolean moveBack = true;
+    private int id;
     
     /**
      * Construtor
-     * @param typeObject 
+     * @param typeObject
+     * @param id
+     * @param e
      */
-    public Objects(int typeObject) {
+    public Objects(int typeObject, int id, MouseEvent e) {
         this.typeObject = typeObject;
+        this.id = id;
         random = new Random();
         color = new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255));
-        x = random.nextInt(300) + 10;
-        y = random.nextInt(300) + 10;
+        x = e.getX();
+        y = e.getY();
         xInicial = x;
         yInicial = y;
         
-        velX = random.nextInt(2 + 2) - 2;
-        velY = random.nextInt(2 + 2) - 2;
+        velX = random.nextInt(7 + 2) - 2;
+        velY = random.nextInt(7 + 2) - 2;
         
         if(velX < 1 && velY < 1) {
             velX = 1;
@@ -57,13 +63,14 @@ public class Objects {
                 break;
             case 2:
                 width = random.nextInt(110) + 10;
-                height = random.nextInt(110) + 10;
+                height = width;
                 break;
             case 3:
                 x1 = random.nextInt(40) + 10;
                 x2 = x1 * 2;
                 y1 = x2;
                 y2 = x2;
+                break;
         }
     }
     
@@ -89,7 +96,7 @@ public class Objects {
                     new int[]{0, y1, y2},
                     3
                 );
-                triangle.translate(x, y);
+                triangle.translate(x, 10);
                 
                 g2d.setColor(color);
                 g2d.fill(triangle);
@@ -128,13 +135,54 @@ public class Objects {
         return this.y;
     }
     
-    public void move(double heightPanel, double widthPanel) {
-        if(x <= 0 || x >= widthPanel - width) {
-            velX = -velX;
-        }
+    public int getId() {
+        return this.id;
+    }
+    
+    public void setId(int id) { 
+        this.id = id;
+    }
+    
+    public int getType() {
+        return this.typeObject;
+    }
+    
+    /**
+     * Responsável por movimentos e colisões
+     * @param heightPanel
+     * @param widthPanel 
+     * @param lista
+     */
+    public void move(double heightPanel, double widthPanel, List<Objects> lista) {
+        switch(typeObject) {
+            case 3:
+                System.out.println(x);
+                
+                if(x <= 0 || x >= widthPanel - triangle.getBounds().width) {
+                    velX = -velX;
+                }
+
+                if(y <= 0 || y >= heightPanel - triangle.getBounds().height) {
+                    velY = -velY;
+                }
+
+                for (Objects o : lista) {
+                    if(o.getType() == 3) {
+                        if(x == o.getX() && id != o.getId()) {
+                            velX = -velX;
+                            System.out.println("teste");
+                        }
+                    }
+                }
+                break;
+            default:
+                if(x <= 0 || x >= widthPanel - width) {
+                    velX = -velX;
+                }
         
-        if(y <= 0 || y >= heightPanel - height) {
-            velY = -velY;
+                if(y <= 0 || y >= heightPanel - height) {
+                    velY = -velY;
+                }
         }
 
         x = x + velX;

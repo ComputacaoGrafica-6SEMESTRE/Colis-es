@@ -28,6 +28,7 @@ public class Desenho extends JPanel {
     private Timer timer;
     private double height;
     private double width;
+    private int count = 0;
     
     public Desenho() {
         listaObjetcs = new ArrayList<>();
@@ -38,16 +39,16 @@ public class Desenho extends JPanel {
                 super.mouseClicked(e);
                 
                 // Clique Botão Esquerdo
-                if(e.getButton() == MouseEvent.BUTTON1) 
-                    listaObjetcs.add(new Objects(CIRCULO));
-
+                if(e.getButton() == MouseEvent.BUTTON1) {
+                    listaObjetcs.add(new Objects(CIRCULO, ++count, e));
+                }
                 // Clique Botão do Meio
                 if(e.getButton() == MouseEvent.BUTTON2) 
-                    listaObjetcs.add(new Objects(QUADRADO));
+                    listaObjetcs.add(new Objects(QUADRADO, ++count, e));
 
                 // Clique Botão direito
                 if(e.getButton() == MouseEvent.BUTTON3) 
-                    listaObjetcs.add(new Objects(TRIANGULO));
+                    listaObjetcs.add(new Objects(TRIANGULO, ++count, e));
                 repaint();
             }
         });
@@ -56,7 +57,7 @@ public class Desenho extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 for (Objects o : listaObjetcs) {
-                    o.move(height, width);
+                    o.move(height, width, listaObjetcs);
                     repaint();
                 }
             }
@@ -92,5 +93,9 @@ public class Desenho extends JPanel {
     
     public void setWidth(double width) {
         this.width = width;
+    }
+    
+    public List<Objects> getLista() {
+        return listaObjetcs;
     }
 }

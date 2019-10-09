@@ -35,17 +35,10 @@ public class Colisions extends JFrame {
         
         setBackground(Color.white);
         
-        setResizable(false);;
+        setResizable(false);
  
         // Comportamento da Janela
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
-    
-    /**
-     * Realiza a inserção do objeto na tela
-     * @param typeObject 
-     */
-    public void generateFigure(int typeObject) {
     }
     
     /**
