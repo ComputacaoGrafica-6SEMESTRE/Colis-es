@@ -88,7 +88,6 @@ public class Objects {
             case 2:
                 g2d.setColor(color);
                 g2d.fillRect(x, y, width, height);
-                System.out.println(height);
                 break;
             default:
                 triangle = new Polygon(
@@ -96,7 +95,7 @@ public class Objects {
                     new int[]{0, y1, y2},
                     3
                 );
-                triangle.translate(x, 10);
+                triangle.translate(x, y);
                 
                 g2d.setColor(color);
                 g2d.fill(triangle);
@@ -143,8 +142,24 @@ public class Objects {
         this.id = id;
     }
     
+    public int getWidth() {
+        return this.width;
+    }
+    
+    public int getX1() {
+        return this.x1;
+    }
+    
+    public int getWidthTriangle() {
+        return this.x2 - this.x1;
+    }
+    
     public int getType() {
         return this.typeObject;
+    }
+    
+    public Polygon getTriangle() {
+        return triangle;
     }
     
     /**
@@ -156,8 +171,6 @@ public class Objects {
     public void move(double heightPanel, double widthPanel, List<Objects> lista) {
         switch(typeObject) {
             case 3:
-                System.out.println(x);
-                
                 if(x <= 0 || x >= widthPanel - triangle.getBounds().width) {
                     velX = -velX;
                 }
@@ -167,13 +180,27 @@ public class Objects {
                 }
 
                 for (Objects o : lista) {
-                    if(o.getType() == 3) {
-                        if(x == o.getX() && id != o.getId()) {
+                    if(o.getType() == 3 && id != o.getId()) {
+                        if(x <= o.getX() + o.getWidthTriangle() && 
+                            x >= o.getX() + (o.getWidthTriangle() / 2) &&
+                            o.getY() + o.getTriangle().getBounds().height >= y &&
+                            o.getY() + o.getTriangle().getBounds().height <= y + triangle.getBounds().height) {
                             velX = -velX;
-                            System.out.println("teste");
                         }
+                        
+//                        if(x == (o.getX() - o.height)) {;
+//                            velX = -velX;
+//                            System.out.println("teste");
+//                        }
+//                        
+//                        if(x == (o.getX() + (o.width / 2)) && y == o.getX() - o.height) {
+//                            velX = -velX;
+//                            System.out.println("teste");                            
+//                        }
                     }
                 }
+                x = x + velX;
+                y = y + velY;
                 break;
             default:
                 if(x <= 0 || x >= widthPanel - width) {
@@ -183,9 +210,9 @@ public class Objects {
                 if(y <= 0 || y >= heightPanel - height) {
                     velY = -velY;
                 }
+                
+                x = x + velX;
+                y = y + velY;
         }
-
-        x = x + velX;
-        y = y + velY;
     }
 }

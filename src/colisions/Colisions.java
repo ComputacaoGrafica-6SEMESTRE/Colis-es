@@ -19,7 +19,7 @@ public class Colisions extends JFrame {
     
     public void generateWindow() {
         setTitle("Trabalho de colisões");
-        setSize(800, 600);
+        setSize(300, 300);
         
         // Centralizando Tela
         setLocationRelativeTo(null);
