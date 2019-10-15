@@ -134,32 +134,92 @@ public class Objects {
         return this.y;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public int getId() {
         return this.id;
     }
     
+    /**
+     * 
+     * @param id 
+     */
     public void setId(int id) { 
         this.id = id;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public int getWidth() {
         return this.width;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public int getX1() {
         return this.x1;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public int getWidthTriangle() {
         return this.x2 - this.x1;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public int getType() {
         return this.typeObject;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public Polygon getTriangle() {
         return triangle;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public int getVelX() {
+        return this.velX;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public int getVelY() {
+        return this.velY;
+    }
+    
+    /**
+     * 
+     * @param velY 
+     */
+    public void setVelY(int velY) {
+        this.velY = velY;
+    }
+    
+    /**
+     * 
+     * @param velX 
+     */
+    public void setVelX(int velX) {
+        this.velX = velX;
     }
     
     /**
@@ -181,24 +241,25 @@ public class Objects {
 
                 for (Objects o : lista) {
                     if(o.getType() == 3 && id != o.getId()) {
-                        if(x <= o.getX() + o.getWidthTriangle() && 
-                            x >= o.getX() + (o.getWidthTriangle() / 2) &&
-                            o.getY() + o.getTriangle().getBounds().height >= y &&
-                            o.getY() + o.getTriangle().getBounds().height <= y + triangle.getBounds().height) {
+//                        System.out.println(x1);
+                        if(o.getX() == x + velX || o.getX() == x - velX || o.getX() == x) {
+//                            if((velX < 0 && o.getVelX() > 0) || (velX > 0 && o.getVelX() < 0))
+                            o.setVelX(-o.getVelX());
                             velX = -velX;
                         }
                         
-//                        if(x == (o.getX() - o.height)) {;
-//                            velX = -velX;
-//                            System.out.println("teste");
-//                        }
-//                        
-//                        if(x == (o.getX() + (o.width / 2)) && y == o.getX() - o.height) {
-//                            velX = -velX;
-//                            System.out.println("teste");                            
-//                        }
+                        if((o.getY() == this.y + velY || o.getY() == this.y - velY || o.getY() == y) && o.getX() >= x && o.getX() <= x + triangle.getBounds().getWidth()) {
+                            this.velY = -this.velY;
+                            o.setVelY(-o.getVelY());
+//                            if((o.getVelY() < 0 && this.velY < 0) || (o.getVelY() > 0 && this.velY > 0)) {;
+//                                this.velY = -this.velY;
+//                            } else {
+//                                o.setVelY(-o.getVelY());
+//                            }
+                        }
                     }
                 }
+ 
                 x = x + velX;
                 y = y + velY;
                 break;
